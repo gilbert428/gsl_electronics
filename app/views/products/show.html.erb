@@ -1,13 +1,22 @@
 <!-- app/views/products/show.html.erb -->
-<h1><%= @product.item_description %></h1>
-<p><strong>Category:</strong> <%= @product.category %></p>
-<p><strong>Brand:</strong> <%= @product.brand %></p>
-<p><strong>Price:</strong> $<%= @product.price %></p>
-<p><strong>Stock Quantity:</strong> <%= @product.stock_quantity %></p>
-<p><strong>Sub Category:</strong> <%= @product.sub_category %></p>
-<p><strong>Color:</strong> <%= @product.color %></p>
-<p><strong>Storage Capacity:</strong> <%= @product.storage_capacity %></p>
-<p><strong>Description:</strong> <%= @product.item_description %></p>
-<%= image_tag @product.image_link if @product.image_link.present? %>
+<div class="bg-white">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-4"><%= @product.item_description %></h1>
 
-<%= link_to 'Back to Products List', products_path %>
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+      <div class="aspect-w-1 aspect-h-1 w-48 h-48 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+        <img src="<%= @product.image_link %>" alt="<%= @product.item_description %>" class="w-full h-full object-cover object-center lg:w-48 lg:h-48">
+      </div>
+      <div class="mt-4 flex flex-col">
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">$<%= @product.price %></h2>
+        <p class="text-sm text-gray-700 mb-1"><strong>Stock Quantity:</strong> <%= @product.stock_quantity %></p>
+        <p class="text-sm text-gray-700 mb-1"><strong>Brand:</strong> <%= @product.brand %></p>
+        <p class="text-sm text-gray-700 mb-1"><strong>Category:</strong> <%= @product.category %></p>
+        <p class="text-sm text-gray-700 mb-1"><strong>Sub Category:</strong> <%= @product.sub_category %></p>
+        <p class="text-sm text-gray-700 mb-1"><strong>Color:</strong> <%= @product.color %></p>
+        <p class="text-sm text-gray-700 mb-1"><strong>Storage Capacity:</strong> <%= @product.storage_capacity %></p>
+        <p class="text-sm text-gray-700 mb-1"><strong>SKU:</strong> <%= @product.sku %></p>
+      </div>
+    </div>
+  </div>
+</div>

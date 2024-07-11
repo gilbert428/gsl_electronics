@@ -8,7 +8,6 @@ class ProductsController < ApplicationController
     end
 
     if params[:filter] == "on_sale"
-      # Assuming there is an `on_sale` boolean attribute
       @products = @products.where(on_sale: true)
     elsif params[:filter] == "new"
       @products = @products.where("created_at >= ?", 3.days.ago)
@@ -16,12 +15,12 @@ class ProductsController < ApplicationController
       @products = @products.where("updated_at >= ?", 3.days.ago)
     end
 
-    @products = @products.page(params[:page]).per(10)
+    @filtered_products = @products.page(params[:page]).per(10)
+    @all_products = Product.all.page(params[:page]).per(10)
   end
 
   def show
     @product = Product.find(params[:id])
-    puts "Product loaded: #{@product.inspect}" # Debugging line
   end
 
   def new
@@ -51,8 +50,8 @@ class ProductsController < ApplicationController
       @products = @products.where(category: params[:category])
     end
 
-    @products = @products.page(params[:page]).per(10)
+    @filtered_products = @products.page(params[:page]).per(10)
+    @all_products = Product.all.page(params[:page]).per(10)
     render :index
   end
-
 end

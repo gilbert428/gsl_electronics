@@ -1,26 +1,54 @@
 <!-- app/views/products/index.html.erb -->
-<h1>Product List</h1>
+<div class="bg-white">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <%= form_with url: search_products_path, method: :get, local: true, class: "space-y-4" do |f| %>
+      <div class="space-y-2">
+        <%= f.label :keyword, "Search by keyword:", class: "block text-lg font-medium text-gray-700" %>
+        <%= f.text_field :keyword, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+      </div>
+      <div>
+        <%= f.submit "Search", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      </div>
+    <% end %>
 
-<%= form_with url: search_products_path, method: :get, local: true do |f| %>
-  <div>
-    <%= f.label :keyword, "Search by keyword:" %>
-    <%= f.text_field :keyword %>
-  </div>
-  <div>
-    <%= f.label :category, "Filter by category:" %>
-    <%= f.select :category, options_for_select(@categories.pluck(:category), selected: params[:category]), include_blank: true %>
-  </div>
-  <div>
-    <%= f.submit "Search" %>
-  </div>
-<% end %>
+    <% if @filtered_products.present? %>
+      <div class="mt-10">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          <% @filtered_products.each do |product| %>
+            <a href="<%= product_path(product) %>" class="group">
+              <div class="aspect-w-1 aspect-h-1 w-48 h-48 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+                <img src="<%= product.image_link %>" alt="<%= product.item_description %>" class="w-full h-full object-cover object-center lg:w-48 lg:h-48">
+              </div>
+              <h3 class="mt-4 text-sm text-gray-700"><%= product.item_description %></h3>
+              <p class="mt-1 text-lg font-medium text-gray-900">$<%= product.price %></p>
+            </a>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
 
-<ul>
-  <% @products.each do |product| %>
-    <li>
-      <%= link_to product.item_description, product_path(product) %> - <%= product.category %>
-    </li>
-  <% end %>
-</ul>
-
-<%= paginate @products %>
+    <div class="mt-10">
+      <h1 class="text-2xl font-bold">Browse Products</h1>
+      <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        <% @all_products.each do |product| %>
+          <a href="<%= product_path(product) %>" class="group">
+            <div class="aspect-w-1 aspect-h-1 w-48 h-48 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
+              <img src="<%= product.image_link %>" alt="<%= product.item_description %>" class="w-full h-full object-cover object-center lg:w-48 lg:h-48">
+            </div>
+            <h3 class="mt-4 text-sm text-gray-700"><%= product.item_description %></h3>
+            <p class="mt-1 text-lg font-medium text-gray-900">$<%= product.price %></p>
+            <p class="text-sm text-gray-700"><strong>Stock Quantity:</strong> <%= product.stock_quantity %></p>
+            <p class="text-sm text-gray-700"><strong>Brand:</strong> <%= product.brand %></p>
+            <p class="text-sm text-gray-700"><strong>Sub Category:</strong> <%= product.sub_category %></p>
+            <p class="text-sm text-gray-700"><strong>Color:</strong> <%= product.color %></p>
+            <p class="text-sm text-gray-700"><strong>Storage Capacity:</strong> <%= product.storage_capacity %></p>
+            <p class="text-sm text-gray-700"><strong>SKU:</strong> <%= product.sku %></p>
+          </a>
+        <% end %>
+      </div>
+      <div class="mt-8">
+        <%= paginate @all_products %>
+      </div>
+    </div>
+  </div>
+</div>
