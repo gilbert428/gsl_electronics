@@ -1,25 +1,46 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-
 require 'csv'
 
-CSV.foreach(Rails.root.join('C:/Users/gilbe/Documents/WEBD-3011_(255576)_AgileFullStackWebDevelopment_Diogo/introRails_eCommerce/products.csv'), headers: true) do |row|
-  Product.create(
-    item_description: row['item_description'],
-    stock_quantity: row['stock_quantity'],
-    brand: row['brand'],
-    category: row['category'],
-    sub_category: row['sub_category'],
-    color: row['color'],
-    storage_capacity: row['storage_capacity'],
-    price: row['price'],
-    image_link: row['image_link']
-  )
+# Clear existing records
+Product.destroy_all
+#Category.destroy_all
+
+# Path to the CSV file
+csv_file = Rails.root.join('db/products.csv')
+
+# Check if the CSV file exists
+if File.exist?(csv_file)
+  puts "CSV file found. Proceeding with seeding..."
+  # Read the CSV data
+  csv_data = File.read(csv_file)
+  products = CSV.parse(csv_data, headers: true)
+
+  # Iterate through each row in the CSV file
+  products.each do |product|
+    # Find or create the category
+    category = Category.find_or_create_by(name: product['category'])
+    puts "Processing product: #{product['item_description']} in category: #{category.name}"
+
+    # Create the product
+    created_product = Product.create(
+      sku: product['sku'],
+      item_description: product['item_description'],
+      stock_quantity: product['stock_quantity'],
+      brand: product['brand'],
+      sub_category: product['sub_category'],
+      color: product['color'],
+      storage_capacity: product['storage_capacity'],
+      price: product['price'],
+      image_link: product['image_link'],
+      category: product['category']
+      #category: category
+    )
+
+    if created_product.persisted?
+      puts "Product #{created_product.item_description} created successfully."
+    else
+      puts "Failed to create product #{product['item_description']}. Errors: #{created_product.errors.full_messages.join(', ')}"
+    end
+  end
+else
+  puts "CSV file not found"
 end
