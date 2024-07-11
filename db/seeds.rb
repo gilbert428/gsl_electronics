@@ -44,3 +44,4 @@ if File.exist?(csv_file)
 else
   puts "CSV file not found"
 end
+AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
