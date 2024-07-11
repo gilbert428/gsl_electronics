@@ -1,13 +1,26 @@
 <!-- app/views/products/index.html.erb -->
 <h1>Product List</h1>
+
+<%= form_with url: search_products_path, method: :get, local: true do |f| %>
+  <div>
+    <%= f.label :keyword, "Search by keyword:" %>
+    <%= f.text_field :keyword %>
+  </div>
+  <div>
+    <%= f.label :category, "Filter by category:" %>
+    <%= f.select :category, options_for_select(@categories.pluck(:category), selected: params[:category]), include_blank: true %>
+  </div>
+  <div>
+    <%= f.submit "Search" %>
+  </div>
+<% end %>
+
 <ul>
-  <% if @products.present? %>
-    <% @products.each do |product| %>
-      <li>
-        <%= link_to product.item_description, product_path(product) %> - <%= product.category %>
-      </li>
-    <% end %>
-  <% else %>
-    <li>No products available</li>
+  <% @products.each do |product| %>
+    <li>
+      <%= link_to product.item_description, product_path(product) %> - <%= product.category %>
+    </li>
   <% end %>
 </ul>
+
+<%= paginate @products %>

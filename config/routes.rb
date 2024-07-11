@@ -1,5 +1,10 @@
+# config/routes.rb
 Rails.application.routes.draw do
-  resources :products, only: [:index, :show]
+  resources :products, only: [:index, :show] do
+    collection do
+      get 'search'
+    end
+  end
   resources :payments
   resources :taxes
   resources :cart_items
@@ -10,10 +15,7 @@ Rails.application.routes.draw do
   resources :orders
   resources :customers
 
-
-
   root "products#index"
-
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
