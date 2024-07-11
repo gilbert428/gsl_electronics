@@ -1,15 +1,6 @@
 <!-- app/views/products/index.html.erb -->
 <div class="bg-white">
-  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-    <%= form_with url: search_products_path, method: :get, local: true, class: "space-y-4" do |f| %>
-      <div class="space-y-2">
-        <%= f.label :keyword, "Search by keyword:", class: "block text-lg font-medium text-gray-700" %>
-        <%= f.text_field :keyword, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-      </div>
-      <div>
-        <%= f.submit "Search", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-      </div>
-    <% end %>
+  
 
     <% if @filtered_products.present? %>
       <div class="mt-10">
