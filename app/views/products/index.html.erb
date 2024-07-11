@@ -1,2 +1,13 @@
-<h1>Products#index</h1>
-<p>Find me in app/views/products/index.html.erb</p>
+<!-- app/views/products/index.html.erb -->
+<h1>Product List</h1>
+<ul>
+  <% if @products.present? %>
+    <% @products.each do |product| %>
+      <li>
+        <%= link_to product.item_description, product_path(product) %> - <%= product.category %>
+      </li>
+    <% end %>
+  <% else %>
+    <li>No products available</li>
+  <% end %>
+</ul>
