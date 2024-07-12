@@ -11,6 +11,7 @@ class CreateProducts < ActiveRecord::Migration[7.1]
       t.string :storage_capacity
       t.integer :price
       t.string :image_link
+      t.references :category, null: false, foreign_key: true
 
       t.timestamps
     end

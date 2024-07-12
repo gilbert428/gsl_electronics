@@ -2,14 +2,14 @@ class ProductsController < ApplicationController
   before_action :set_categories, only: [:index, :show, :search]
 
   def index
-    @products = Product.all
+    @products = Product.includes(:category).all
 
     if params[:keyword].present?
       @products = @products.where("item_description LIKE ?", "%#{params[:keyword]}%")
     end
 
     if params[:category].present?
-      @products = @products.where(category: params[:category])
+      @products = @products.joins(:category).where(categories: { name: params[:category] })
     end
 
     @products = @products.page(params[:page]).per(10)
@@ -20,14 +20,14 @@ class ProductsController < ApplicationController
   end
 
   def search
-    @products = Product.all
+    @products = Product.includes(:category).all
 
     if params[:keyword].present?
       @products = @products.where("item_description LIKE ?", "%#{params[:keyword]}%")
     end
 
     if params[:category].present?
-      @products = @products.where(category: params[:category])
+      @products = @products.joins(:category).where(categories: { name: params[:category] })
     end
 
     @products = @products.page(params[:page]).per(10)
@@ -37,6 +37,6 @@ class ProductsController < ApplicationController
   private
 
   def set_categories
-    @categories = Product.select(:category).distinct
+    @categories = Category.all
   end
 end

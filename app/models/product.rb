@@ -4,6 +4,7 @@ class Product < ApplicationRecord
   # Associations
   has_many :cart_items
   has_many :order_items
+  belongs_to :category
 
   # Ransack configuration
   def self.ransackable_attributes(auth_object = nil)
@@ -11,6 +12,6 @@ class Product < ApplicationRecord
   end
 
   def self.ransackable_associations(auth_object = nil)
-    %w[cart_items order_items]
+    %w[cart_items order_items category]
   end
 end
