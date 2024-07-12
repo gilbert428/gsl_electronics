@@ -28,11 +28,9 @@
         <div class="flex space-x-4">
           <%= form_with url: search_products_path, method: :get, local: true, class: "space-y-2 flex" do |f| %>
             <div class="space-y-2">
-              <%= f.label :keyword, "Search by keyword:", class: "block text-lg font-medium text-gray-700" %>
-              <%= f.text_field :keyword, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+              <%= f.text_field :keyword, placeholder: "Search by keyword", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
             </div>
             <div class="space-y-2">
-              <%= f.label :category, "Filter by category:", class: "block text-lg font-medium text-gray-700" %>
               <%= f.select :category, options_for_select(@categories.pluck(:category), selected: params[:category]), include_blank: true, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
             </div>
             <div>

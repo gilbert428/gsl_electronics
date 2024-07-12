@@ -1,27 +1,9 @@
 <!-- app/views/products/index.html.erb -->
 <div class="bg-white">
-  
-
-    <% if @filtered_products.present? %>
-      <div class="mt-10">
-        <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-          <% @filtered_products.each do |product| %>
-            <a href="<%= product_path(product) %>" class="group">
-              <div class="aspect-w-1 aspect-h-1 w-48 h-48 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
-                <img src="<%= product.image_link %>" alt="<%= product.item_description %>" class="w-full h-full object-cover object-center lg:w-48 lg:h-48">
-              </div>
-              <h3 class="mt-4 text-sm text-gray-700"><%= product.item_description %></h3>
-              <p class="mt-1 text-lg font-medium text-gray-900">$<%= product.price %></p>
-            </a>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-
-    <div class="mt-10">
-      <h1 class="text-2xl font-bold">Browse Products</h1>
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <% if @products.present? %>
       <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-        <% @all_products.each do |product| %>
+        <% @products.each do |product| %>
           <a href="<%= product_path(product) %>" class="group">
             <div class="aspect-w-1 aspect-h-1 w-48 h-48 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
               <img src="<%= product.image_link %>" alt="<%= product.item_description %>" class="w-full h-full object-cover object-center lg:w-48 lg:h-48">
@@ -38,8 +20,10 @@
         <% end %>
       </div>
       <div class="mt-8">
-        <%= paginate @all_products %>
+        <%= paginate @products %>
       </div>
-    </div>
+    <% else %>
+      <p class="text-gray-700 mt-10">No products found.</p>
+    <% end %>
   </div>
 </div>
