@@ -1,5 +1,7 @@
 # config/routes.rb
 Rails.application.routes.draw do
+  get 'pages/contact'
+  get 'pages/about'
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   resources :products, only: [:index, :show] do
@@ -18,6 +20,10 @@ Rails.application.routes.draw do
   resources :customers
 
   root "products#index"
+
+  get 'contact', to: 'pages#contact'
+  get 'about', to: 'pages#about'
+
 
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

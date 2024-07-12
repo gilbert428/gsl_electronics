@@ -1,6 +1,5 @@
+# app/controllers/products_controller.rb
 class ProductsController < ApplicationController
-  before_action :set_categories, only: [:index, :show, :search]
-
   def index
     @products = Product.includes(:category).all
 
@@ -32,11 +31,5 @@ class ProductsController < ApplicationController
 
     @products = @products.page(params[:page]).per(10)
     render :index
-  end
-
-  private
-
-  def set_categories
-    @categories = Category.all
   end
 end
