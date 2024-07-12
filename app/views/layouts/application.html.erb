@@ -6,7 +6,6 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
@@ -42,19 +41,6 @@
     </header>
 
     <main class="container mx-auto mt-10 px-5">
-      <%= form_with url: search_products_path, method: :get, local: true, class: "space-y-4 mb-6" do |f| %>
-        <div class="space-y-2">
-          <%= f.label :keyword, "Search by keyword:", class: "block text-lg font-medium text-gray-700" %>
-          <%= f.text_field :keyword, class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-        </div>
-        <div class="space-y-2">
-          <%= f.label :category, "Filter by category:", class: "block text-lg font-medium text-gray-700" %>
-          <%= f.select :category, options_for_select(@categories.pluck(:category), selected: params[:category]), include_blank: true, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
-        </div>
-        <div>
-          <%= f.submit "Search", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-        </div>
-      <% end %>
       <%= yield %>
     </main>
   </body>
