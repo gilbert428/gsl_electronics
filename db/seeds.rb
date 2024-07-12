@@ -1,6 +1,6 @@
 require 'csv'
 
-# Clear existing records
+=begin # Clear existing records
 Product.destroy_all
 Category.destroy_all
 
@@ -54,4 +54,13 @@ if File.exist?(csv_file)
   end
 else
   puts "CSV file not found"
+end
+=end
+
+StaticPage.find_or_create_by(title: 'About Us') do |page|
+  page.content = 'Welcome to GslElectronics! We offer a wide range of electronic products to meet your needs.'
+end
+
+StaticPage.find_or_create_by(title: 'Contact Us') do |page|
+  page.content = 'If you have any questions, feel free to reach out to us!'
 end
