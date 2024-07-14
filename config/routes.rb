@@ -9,6 +9,9 @@ Rails.application.routes.draw do
       get 'search'
     end
   end
+
+  resources :categories, only: [:show]
+
   resources :payments
   resources :taxes
   resources :cart_items

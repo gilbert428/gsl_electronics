@@ -1,6 +1,10 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
+  before_action :set_product_breadcrumbs, only: [:index, :show]
+
   def index
+    add_breadcrumb 'Products', products_path
+
     @products = Product.includes(:category).all
 
     if params[:keyword].present?
@@ -16,6 +20,8 @@ class ProductsController < ApplicationController
 
   def show
     @product = Product.find(params[:id])
+    add_breadcrumb @product.category.name, category_path(@product.category)
+    add_breadcrumb @product.item_description
   end
 
   def search
@@ -31,5 +37,11 @@ class ProductsController < ApplicationController
 
     @products = @products.page(params[:page]).per(10)
     render :index
+  end
+
+  private
+
+  def set_product_breadcrumbs
+    add_breadcrumb 'Products', products_path
   end
 end
