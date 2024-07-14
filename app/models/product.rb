@@ -6,6 +6,8 @@ class Product < ApplicationRecord
   has_many :order_items
   belongs_to :category
 
+  validates :sub_category, presence: true
+
   # Ransack configuration
   def self.ransackable_attributes(auth_object = nil)
     %w[brand category color created_at id image_link item_description price stock_quantity storage_capacity sub_category updated_at]

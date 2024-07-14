@@ -44,9 +44,9 @@ ActiveAdmin.register Product do
   form do |f|
     f.inputs do
       f.input :item_description
-      f.input :brand
-      f.input :category
-      f.input :sub_category
+      f.input :brand, input_html: { value: 'Apple' } # Set default brand to "Apple"
+      f.input :category, as: :select, collection: Category.pluck(:name, :id), include_blank: false
+      f.input :sub_category, as: :select, collection: Product.distinct.pluck(:sub_category).compact, include_blank: false
       f.input :color
       f.input :storage_capacity
       f.input :price

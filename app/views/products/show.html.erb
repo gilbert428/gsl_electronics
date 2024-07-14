@@ -11,7 +11,7 @@
         <h2 class="text-2xl font-bold text-gray-900 mb-2">$<%= @product.price %></h2>
         <p class="text-sm text-gray-700 mb-1"><strong>Stock Quantity:</strong> <%= @product.stock_quantity %></p>
         <p class="text-sm text-gray-700 mb-1"><strong>Brand:</strong> <%= @product.brand %></p>
-        <p class="text-sm text-gray-700 mb-1"><strong>Category:</strong> <%= @product.category %></p>
+        <p class="text-sm text-gray-700 mb-1"><strong>Category:</strong> <%= @product.category.name %></p>
         <p class="text-sm text-gray-700 mb-1"><strong>Sub Category:</strong> <%= @product.sub_category %></p>
         <p class="text-sm text-gray-700 mb-1"><strong>Color:</strong> <%= @product.color %></p>
         <p class="text-sm text-gray-700 mb-1"><strong>Storage Capacity:</strong> <%= @product.storage_capacity %></p>
