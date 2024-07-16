@@ -1,24 +1,11 @@
 # app/controllers/products_controller.rb
-
 class ProductsController < ApplicationController
   before_action :set_product_breadcrumbs, only: [:index, :show]
 
   def index
     add_breadcrumb 'Products', products_path
 
-    @products = Product.includes(:category)
-
-    if params[:sale].present?
-      @products = @products.on_sale
-    end
-
-    if params[:new].present?
-      @products = @products.new_products
-    end
-
-    if params[:recently_updated].present?
-      @products = @products.recently_updated
-    end
+    @products = Product.includes(:category).all
 
     if params[:keyword].present?
       @products = @products.where("item_description LIKE ?", "%#{params[:keyword]}%")

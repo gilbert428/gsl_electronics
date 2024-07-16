@@ -1,5 +1,3 @@
-# app/admin/product.rb
-
 ActiveAdmin.register Product do
 
   # See permitted parameters documentation:
@@ -17,7 +15,7 @@ ActiveAdmin.register Product do
   #   permitted
   # end
 
-  permit_params :item_description, :stock_quantity, :brand, :category_id, :sub_category, :color, :storage_capacity, :price, :image_link, :sale, :sku
+  permit_params :item_description, :stock_quantity, :brand, :category, :sub_category, :color, :storage_capacity, :price, :image_link
 
   index do
     selectable_column
@@ -28,11 +26,9 @@ ActiveAdmin.register Product do
     column :sub_category
     column :color
     column :storage_capacity
-        column :price
+    column :price
     column :stock_quantity
     column :image_link
-    column :sku
-    column :sale
     actions
   end
 
@@ -44,22 +40,18 @@ ActiveAdmin.register Product do
   filter :storage_capacity
   filter :price
   filter :stock_quantity
-  filter :sku
-  filter :sale
 
   form do |f|
     f.inputs do
       f.input :item_description
-      f.input :brand, input_html: { value: 'Apple' }
-      f.input :category_id, as: :select, collection: Category.pluck(:name, :id), include_blank: false, label: 'Category'
+      f.input :brand, input_html: { value: 'Apple' } # Set default brand to "Apple"
+      f.input :category, as: :select, collection: Category.pluck(:name, :id), include_blank: false
       f.input :sub_category, as: :select, collection: Product.distinct.pluck(:sub_category).compact, include_blank: false
       f.input :color
       f.input :storage_capacity
       f.input :price
       f.input :stock_quantity
       f.input :image_link
-      f.input :sku
-      f.input :sale
     end
     f.actions
   end

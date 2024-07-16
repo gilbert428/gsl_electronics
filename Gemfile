@@ -73,7 +73,3 @@ gem "devise", "~> 4.9"
 gem "sassc-rails", "~> 2.1"
 
 gem "tailwindcss-rails", "~> 2.6"
-
-gem 'breadcrumbs_on_rails'
-
-gem 'trix'
