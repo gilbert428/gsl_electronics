@@ -1,7 +1,17 @@
-<!-- app/views/products/show.html.erb -->
 <div class="bg-white">
   <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
     <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-4"><%= @product.item_description %></h1>
+
+    <nav class="mb-4">
+      <h2 class="text-xl font-bold tracking-tight text-gray-900 mb-2">Categories</h2>
+      <ul class="flex flex-wrap">
+        <% Category.all.each do |category| %>
+          <li class="mr-4 mb-2">
+            <%= link_to category.name, category_path(category), class: "inline-block px-3 py-1 bg-blue-100 text-blue-500 rounded hover:bg-blue-200" %>
+          </li>
+        <% end %>
+      </ul>
+    </nav>
 
     <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
       <%= render partial: 'products/product_details', locals: { product: @product } %>
