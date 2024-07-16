@@ -96,6 +96,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
+    breadcrumbs_on_rails (4.1.0)
+      railties (>= 5.0)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -320,6 +322,8 @@ GEM
     thor (1.3.1)
     tilt (2.4.0)
     timeout (0.4.1)
+    trix (0.10.1)
+      rails
     turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -353,6 +357,7 @@ PLATFORMS
 DEPENDENCIES
   activeadmin (~> 3.2)
   bootsnap
+  breadcrumbs_on_rails
   capybara
   debug
   devise (~> 4.9)
@@ -367,6 +372,7 @@ DEPENDENCIES
   sqlite3 (~> 1.4)
   stimulus-rails
   tailwindcss-rails (~> 2.6)
+  trix
   turbo-rails
   tzinfo-data
   web-console
