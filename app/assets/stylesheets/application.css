@@ -16,4 +16,7 @@
 
  /* app/assets/stylesheets/application.css */
 
-  
+ @import "tailwindcss/base";
+ @import "tailwindcss/components";
+ @import "tailwindcss/utilities";
+ 

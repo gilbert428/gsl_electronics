@@ -5,6 +5,8 @@ class Product < ApplicationRecord
   has_many :cart_items
   has_many :order_items
   belongs_to :category
+  has_many :cart_items
+  has_many :carts, through: :cart_items
 
   validates :sub_category, presence: true
 
