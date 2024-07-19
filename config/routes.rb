@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'pages/contact'
   get 'pages/about'
 
+
   # Devise routes for Customers
   devise_for :customers
   # Devise routes for Admin users
@@ -33,6 +34,8 @@ Rails.application.routes.draw do
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Root route
-  root "products#index"
+   # Root route
+   root "products#index"
+
+
 end

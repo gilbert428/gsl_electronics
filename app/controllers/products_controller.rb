@@ -1,5 +1,6 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
+  skip_before_action :authenticate_customer!, only: [:index, :show]
   before_action :set_product_breadcrumbs, only: [:index, :show]
 
   def index

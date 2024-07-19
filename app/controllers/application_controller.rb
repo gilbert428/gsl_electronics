@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   include BreadcrumbsHelper
 
+
+
   before_action :set_categories
   before_action :set_breadcrumbs
   protect_from_forgery with: :exception
