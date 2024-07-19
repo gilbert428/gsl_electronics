@@ -1,17 +1,14 @@
-# config/routes.rb
 Rails.application.routes.draw do
   get 'pages/contact'
   get 'pages/about'
 
+  # Devise routes for Customers
+  devise_for :customers
+  # Devise routes for Admin users
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  devise_for :customers, controllers: {
-    registrations: 'customers/registrations'
-  }, path_names: {
-    sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', registration: 'register', sign_up: 'sign_up'
-  }
-
+  # Resource routes
   resources :products, only: [:index, :show] do
     collection do
       get 'search'
@@ -19,7 +16,6 @@ Rails.application.routes.draw do
   end
 
   resources :categories, only: [:show]
-
   resources :payments
   resources :taxes
   resources :cart_items
@@ -30,10 +26,13 @@ Rails.application.routes.draw do
   resources :orders
   resources :customers
 
-  root "products#index"
-
+  # Static pages
   get 'contact', to: 'pages#contact'
   get 'about', to: 'pages#about'
 
+  # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
+
+  # Root route
+  root "products#index"
 end

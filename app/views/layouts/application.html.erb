@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>GSL Electronics</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
@@ -23,11 +23,13 @@
             <li><%= link_to 'Orders', orders_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
             <li><%= link_to 'Contact', contact_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
             <li><%= link_to 'About', about_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
-            <% if customer_signed_in? %>
-              <li><%= link_to 'Sign Out', destroy_customer_session_path, method: :delete, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+        
+              <% if customer_signed_in? %>
+      
+              <%= link_to "Sign Out", destroy_customer_session_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
             <% else %>
-              <li><%= link_to 'Sign In', new_customer_session_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
-              <li><%= link_to 'Sign Up', new_customer_registration_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+              <%= link_to 'Sign Up', new_customer_registration_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+              <%= link_to 'Login', new_customer_session_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
             <% end %>
           </ul>
         </nav>

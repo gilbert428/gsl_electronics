@@ -1,11 +1,11 @@
-# app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   include BreadcrumbsHelper
 
   before_action :set_categories
   before_action :set_breadcrumbs
-
-  helper_method :current_customer
+  protect_from_forgery with: :exception
+  before_action :authenticate_customer!
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
 
@@ -17,9 +17,8 @@ class ApplicationController < ActionController::Base
     add_breadcrumb 'Home', root_path
   end
 
-  def current_customer
-    # Assuming you store the customer ID in the session upon login
-    @current_customer ||= Customer.find(session[:customer_id]) if session[:customer_id]
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :province, :address])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:name, :province, :address])
   end
-
 end
