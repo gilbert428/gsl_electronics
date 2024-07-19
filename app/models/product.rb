@@ -1,12 +1,11 @@
-# app/models/product.rb
-
 class Product < ApplicationRecord
   # Associations
   has_many :cart_items
   has_many :order_items
   belongs_to :category
-  has_many :cart_items
   has_many :carts, through: :cart_items
+
+  has_one_attached :image
 
   validates :sub_category, presence: true
 

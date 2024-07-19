@@ -1,5 +1,9 @@
 <div class="aspect-w-1 aspect-h-1 w-48 h-48 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
-  <img src="<%= product.image_link %>" alt="<%= product.item_description %>" class="w-full h-full object-cover object-center lg:w-48 lg:h-48">
+  <% if product.image.attached? %>
+    <%= image_tag url_for(product.image), alt: product.item_description, class: "w-full h-full object-cover object-center lg:w-48 lg:h-48" %>
+  <% else %>
+    <img src="<%= product.image_link %>" alt="<%= product.item_description %>" class="w-full h-full object-cover object-center lg:w-48 lg:h-48">
+  <% end %>
 </div>
 <div class="mt-4 flex flex-col">
   <h2 class="text-2xl font-bold text-gray-900 mb-2">$<%= product.price %></h2>
