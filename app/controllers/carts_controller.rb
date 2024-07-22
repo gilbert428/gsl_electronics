@@ -1,5 +1,6 @@
 class CartsController < ApplicationController
   before_action :authenticate_customer!, only: [:show]
+  before_action :authenticate_customer!, unless: :admin_namespace?
 
   def show
     @cart = current_cart

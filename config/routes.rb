@@ -2,12 +2,17 @@ Rails.application.routes.draw do
   get 'pages/contact'
   get 'pages/about'
 
+   # Root route
+   root "products#index"
 
-  # Devise routes for Customers
-  devise_for :customers
+
+
   # Devise routes for Admin users
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
+
+  # Devise routes for Customers
+  devise_for :customers
 
   # Resource routes
   resources :products, only: [:index, :show] do
@@ -34,8 +39,7 @@ Rails.application.routes.draw do
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 
-   # Root route
-   root "products#index"
+
 
 
 end
