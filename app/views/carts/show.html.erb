@@ -20,7 +20,9 @@
             <td class="py-2 px-4"><%= item.product.item_description %></td>
             <td class="py-2 px-4">
               <% if item.product.image.attached? %>
-                <%= image_tag item.product.image.variant(resize: "100x100"), class: "w-16 h-16 object-cover" %>
+                <%= image_tag url_for(item.product.image.variant(resize_to_limit: [100, 100])), class: "w-16 h-16 object-cover" %>
+              <% elsif item.product.image_link.present? %>
+                <%= image_tag item.product.image_link, class: "w-16 h-16 object-cover" %>
               <% else %>
                 <span class="text-gray-600">No Image</span>
               <% end %>

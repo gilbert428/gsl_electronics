@@ -1,3 +1,5 @@
+#app/controller/products_controller.rb
+
 class ProductsController < ApplicationController
   before_action :set_product_breadcrumbs, only: [:index, :show]
 
