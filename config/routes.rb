@@ -24,8 +24,7 @@ Rails.application.routes.draw do
   resources :categories, only: [:show]
   resources :payments
   resources :taxes
-  resources :cart_items
-  resources :carts
+  resources :carts, only: [:show]  # Restrict to only show action
   resources :admins
   resources :addresses
   resources :order_items

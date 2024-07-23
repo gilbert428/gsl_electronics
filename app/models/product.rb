@@ -1,3 +1,4 @@
+# app/models/product.rb
 class Product < ApplicationRecord
   # Associations
   has_many :cart_items

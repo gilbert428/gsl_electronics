@@ -4,7 +4,7 @@ class CartItemsController < ApplicationController
 
   def create
     @cart = current_cart
-    @cart_item = @cart.add_product(params[:product_id], params[:quantity] || 1) # Default quantity set to 1
+    @cart_item = @cart.add_product(params[:product_id], params[:quantity] || 1)
 
     if @cart_item.save
       redirect_to cart_path(@cart), notice: 'Product was successfully added to your cart.'
@@ -16,10 +16,6 @@ class CartItemsController < ApplicationController
   private
 
   def current_cart
-    if customer_signed_in?
-      current_customer.cart || current_customer.create_cart
-    else
-      nil
-    end
+    current_customer.carts.find_or_create_by(status: 'active')
   end
 end

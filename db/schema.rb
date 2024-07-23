@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_17_040137) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_23_001757) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -54,7 +54,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_040137) do
   end
 
   create_table "addresses", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "customer_id", null: false
     t.string "address_line_1"
     t.string "address_line_2"
     t.string "city"
@@ -62,7 +62,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_040137) do
     t.string "postal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_addresses_on_user_id"
+    t.index ["customer_id"], name: "index_addresses_on_customer_id"
   end
 
   create_table "admin_users", force: :cascade do |t|
@@ -95,10 +95,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_040137) do
   end
 
   create_table "carts", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "customer_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_carts_on_user_id"
+    t.string "status"
+    t.index ["customer_id"], name: "index_carts_on_customer_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -140,7 +141,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_040137) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "customer_id", null: false
     t.decimal "total_price"
     t.decimal "gst_rate"
     t.decimal "pst_rate"
@@ -155,7 +156,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_040137) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_orders_on_user_id"
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
   end
 
   create_table "pages", force: :cascade do |t|
@@ -212,14 +213,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_17_040137) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "addresses", "users"
+  add_foreign_key "addresses", "customers"
   add_foreign_key "admins", "users"
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
-  add_foreign_key "carts", "users"
+  add_foreign_key "carts", "customers"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
-  add_foreign_key "orders", "users"
+  add_foreign_key "orders", "customers"
   add_foreign_key "payments", "orders"
   add_foreign_key "products", "categories"
 end

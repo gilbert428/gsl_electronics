@@ -1,6 +1,6 @@
+#app/controllers/carts_controller.rb
 class CartsController < ApplicationController
   before_action :authenticate_customer!, only: [:show]
-  before_action :authenticate_customer!, unless: :admin_namespace?
 
   def show
     @cart = current_cart
@@ -12,10 +12,6 @@ class CartsController < ApplicationController
   private
 
   def current_cart
-    if customer_signed_in?
-      current_customer.cart || current_customer.create_cart
-    else
-      nil
-    end
+    current_customer.carts.find_or_create_by(status: 'active')
   end
 end

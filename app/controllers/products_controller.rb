@@ -1,22 +1,8 @@
-# app/controllers/products_controller.rb
 class ProductsController < ApplicationController
-
   before_action :set_product_breadcrumbs, only: [:index, :show]
 
   def index
-    add_breadcrumb 'Products', products_path
-
-    @products = Product.includes(:category).all
-
-    if params[:keyword].present?
-      @products = @products.where("item_description LIKE ?", "%#{params[:keyword]}%")
-    end
-
-    if params[:category].present?
-      @products = @products.joins(:category).where(categories: { name: params[:category] })
-    end
-
-    @products = @products.page(params[:page]).per(10)
+    @products = filtered_products.page(params[:page]).per(10)
   end
 
   def show
@@ -26,17 +12,7 @@ class ProductsController < ApplicationController
   end
 
   def search
-    @products = Product.includes(:category).all
-
-    if params[:keyword].present?
-      @products = @products.where("item_description LIKE ?", "%#{params[:keyword]}%")
-    end
-
-    if params[:category].present?
-      @products = @products.joins(:category).where(categories: { name: params[:category] })
-    end
-
-    @products = @products.page(params[:page]).per(10)
+    @products = filtered_products.page(params[:page]).per(10)
     render :index
   end
 
@@ -44,5 +20,19 @@ class ProductsController < ApplicationController
 
   def set_product_breadcrumbs
     add_breadcrumb 'Products', products_path
+  end
+
+  def filtered_products
+    products = Product.includes(:category).all
+
+    if params[:keyword].present?
+      products = products.where("item_description LIKE ?", "%#{params[:keyword]}%")
+    end
+
+    if params[:category].present?
+      products = products.joins(:category).where(categories: { name: params[:category] })
+    end
+
+    products
   end
 end
