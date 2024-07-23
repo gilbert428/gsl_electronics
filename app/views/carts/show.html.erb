@@ -12,6 +12,7 @@
           <th class="py-2">Quantity</th>
           <th class="py-2">Price</th>
           <th class="py-2">Total</th>
+          <th class="py-2">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -27,9 +28,17 @@
                 <span class="text-gray-600">No Image</span>
               <% end %>
             </td>
-            <td class="py-2 px-4"><%= item.quantity %></td>
+            <td class="py-2 px-4">
+              <%= form_with(model: item, local: true, method: :patch) do |f| %>
+                <%= f.number_field :quantity, min: 1, class: "w-16 text-center border border-gray-300 rounded" %>
+                <%= f.submit "Update", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded ml-2" %>
+              <% end %>
+            </td>
             <td class="py-2 px-4"><%= number_to_currency(item.product.price) %></td>
             <td class="py-2 px-4"><%= number_to_currency(item.product.price * item.quantity) %></td>
+            <td class="py-2 px-4">
+              <%= button_to 'Remove', cart_item_path(item), method: :delete, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" %>
+            </td>
           </tr>
         <% end %>
       </tbody>
