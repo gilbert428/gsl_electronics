@@ -1,4 +1,3 @@
-<!-- app/views/carts/show.html.erb -->
 <div class="container mx-auto p-4">
   <h1 class="text-2xl font-bold mb-4">Shopping Cart</h1>
 
@@ -39,9 +38,39 @@
 
     <div class="mt-4 flex space-x-4">
       <%= link_to 'Continue Shopping', products_path, class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' %>
-      <%= link_to 'Proceed to Checkout', address_checkout_path, class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' %>
+      
+      <%= form_with url: stripe_checkout_index_path, method: :post, local: true, id: "checkout-form" do %>
+        <%= submit_tag "Proceed to Checkout", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <% end %>
     </div>
   <% else %>
     <p class="text-gray-700">Your cart is empty.</p>
   <% end %>
 </div>
+
+<script>
+  document.addEventListener('turbolinks:load', function() {
+    const checkoutForm = document.getElementById('checkout-form');
+
+    checkoutForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      fetch('<%= stripe_checkout_index_path %>', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert('Error creating Stripe session.');
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  });
+</script>

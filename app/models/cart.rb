@@ -17,4 +17,8 @@ class Cart < ApplicationRecord
   def set_default_status
     self.status ||= 'active'
   end
+
+  def total_price
+    cart_items.to_a.sum { |item| item.product.price * item.quantity }
+  end
 end

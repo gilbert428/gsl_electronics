@@ -2,6 +2,10 @@
 class CheckoutsController < ApplicationController
   before_action :authenticate_customer!
 
+  def show
+    @cart = current_cart
+  end
+
   def address
     @cart = current_cart
     @address = current_customer.address || Address.new

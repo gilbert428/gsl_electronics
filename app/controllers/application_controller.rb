@@ -1,3 +1,4 @@
+# app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
   include BreadcrumbsHelper
 
@@ -22,5 +23,9 @@ class ApplicationController < ActionController::Base
 
   def admin_namespace?
     params[:controller].start_with?('admin/')
+  end
+
+  def current_cart
+    current_customer.carts.find_or_create_by(status: 'active')
   end
 end
