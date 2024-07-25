@@ -1,4 +1,4 @@
-#app/controllers/carts_controller.rb
+# app/controllers/carts_controller.rb
 class CartsController < ApplicationController
   before_action :authenticate_customer!, only: [:show]
 

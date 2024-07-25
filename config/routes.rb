@@ -34,6 +34,16 @@ Rails.application.routes.draw do
   resources :orders
   resources :customers
 
+
+  # Checkout routes
+  resource :checkout, only: [] do
+    collection do
+      get 'address'
+      post 'confirm'
+      get 'invoice'
+    end
+  end
+
   # Static pages
   get 'contact', to: 'pages#contact'
   get 'about', to: 'pages#about'

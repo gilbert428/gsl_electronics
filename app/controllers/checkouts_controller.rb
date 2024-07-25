@@ -1,5 +1,4 @@
 # app/controllers/checkouts_controller.rb
-
 class CheckoutsController < ApplicationController
   before_action :authenticate_customer!
 
@@ -18,7 +17,7 @@ class CheckoutsController < ApplicationController
         @cart.cart_items.each do |item|
           @order.order_items.create(product: item.product, quantity: item.quantity, price: item.product.price)
         end
-        redirect_to invoice_checkouts_path(order_id: @order.id), notice: 'Order successfully placed.'
+        redirect_to invoice_checkout_path(order_id: @order.id), notice: 'Order successfully placed.'
       else
         render :address
       end
