@@ -1,3 +1,4 @@
+# app/controllers/stripe_checkout_controller.rb
 class StripeCheckoutController < ApplicationController
   before_action :authenticate_customer!
 
@@ -21,18 +22,20 @@ class StripeCheckoutController < ApplicationController
       mode: 'payment',
       success_url: success_url,
       cancel_url: cancel_url,
+      client_reference_id: @cart.secret_id
     })
 
-    render json: { url: session.url }
+    @session_id = session.id
+    render 'stripe_checkout/checkout'
   end
 
   private
 
   def success_url
-    "#{success_orders_url}?session_id={CHECKOUT_SESSION_ID}"
+    success_orders_url(session_id: '{CHECKOUT_SESSION_ID}')
   end
 
   def cancel_url
-    "#{cancel_orders_url}"
+    cancel_orders_url
   end
 end

@@ -13,26 +13,27 @@ Rails.application.routes.draw do
 
   resources :categories, only: [:show]
   resources :payments, only: [:new, :create]
-  resources :stripe_checkout, only: :create
-  get 'success', to: 'orders#success'
-  get 'cancel', to: 'orders#cancel'
+  resources :stripe_checkout, only: [:create, :index]
+
+  get 'checkout', to: 'stripe_checkout#checkout', as: 'checkout'
+
+  post 'stripe/webhook', to: 'stripe_webhooks#event'
   resources :taxes
   resources :carts, only: [:show]
   resources :cart_items, only: [:create, :update, :destroy]
   resources :admins
   resources :addresses
   resources :order_items
-  resources :orders
-  resources :customers
-
-  resource :checkout, only: [] do
+  resources :stripe_checkout, only: [:create]
+  resources :orders, only: [:index, :show, :new, :create] do
     collection do
-      get '/', to: 'checkouts#show', as: 'checkout'
-      get 'address'
-      post 'confirm'
-      get 'invoice'
+      get 'success'
+      get 'cancel'
     end
   end
+  resources :customers
+
+
 
   get 'contact', to: 'pages#contact'
   get 'about', to: 'pages#about'

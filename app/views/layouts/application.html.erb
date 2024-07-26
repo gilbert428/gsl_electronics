@@ -9,6 +9,7 @@
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
      <meta name="stripe-pk" content="<%= Rails.application.credentials.dig(:stripe, :pk) %>">
+   <script src="https://unpkg.com/@hotwired/stimulus"></script>
     <script src="https://js.stripe.com/v3/"></script>
   </head>
 
@@ -56,5 +57,31 @@
       <%= render_breadcrumbs %>
       <%= yield %>
     </main>
+
+
+    <script>
+      // Initialize Stimulus application
+      (() => {
+        const application = Stimulus.Application.start();
+
+        // Register your controller
+        application.register("stripe-checkout", class extends Stimulus.Controller {
+          static values = { publicKey: String, sessionId: String }
+
+          async connect() {
+            const loadStripe = window.Stripe;
+            const stripe = await loadStripe(this.publicKeyValue);
+
+            stripe.redirectToCheckout({
+              sessionId: this.sessionIdValue
+            }).then((result) => {
+              if (result.error) {
+                alert(result.error.message);
+              }
+            });
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

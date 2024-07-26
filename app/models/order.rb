@@ -1,7 +1,21 @@
-# app/models/order.rb
-class Order < ApplicationRecord
-  belongs_to :user
-  has_many :order_items
+# app/controllers/orders_controller.rb
+class OrdersController < ApplicationController
+  before_action :authenticate_customer!
 
-  validates :total_price, :gst_rate, :pst_rate, :status, presence: true
+  def success
+    @order = Order.find(params[:order_id])
+    if @order.update(status: 'paid', order_date: Time.current)
+      @order.customer.current_cart.cart_items.destroy_all
+      flash[:notice] = "Order successfully paid!"
+      redirect_to order_path(@order)
+    else
+      flash[:alert] = "There was an issue processing your order."
+      redirect_to root_path
+    end
+  end
+
+  def cancel
+    flash[:alert] = "Payment canceled."
+    redirect_to root_path
+  end
 end

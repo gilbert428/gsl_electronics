@@ -1,3 +1,4 @@
+<!-- app/views/carts/show.html.erb -->
 <div class="container mx-auto p-4">
   <h1 class="text-2xl font-bold mb-4">Shopping Cart</h1>
 
@@ -17,7 +18,7 @@
           <tr class="border-b">
             <td class="py-2 px-4"><%= item.product.item_description %></td>
             <td class="py-2 px-4">
-              <%= form_with(model: item, url: cart_item_path(item), method: :patch, local: true) do |f| %>
+              <%= form_with(model: item, url: cart_item_path(item), method: :patch, local: true, data: { turbo: false }) do |f| %>
                 <%= f.number_field :quantity, in: 1..item.product.stock_quantity, class: "form-input mt-1 block w-full" %>
                 <%= f.submit "Update", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mt-2" %>
               <% end %>
@@ -38,39 +39,12 @@
 
     <div class="mt-4 flex space-x-4">
       <%= link_to 'Continue Shopping', products_path, class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' %>
-      
-      <%= form_with url: stripe_checkout_index_path, method: :post, local: true, id: "checkout-form" do %>
-        <%= submit_tag "Proceed to Checkout", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+
+      <%= form_with url: stripe_checkout_index_path, method: :post, local: true, id: "checkout-form", data: { turbo: false, controller: "stripe-checkout" } do %>
+        <%= submit_tag "Proceed to Checkout", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded", data: { stripe_checkout_public_key_value: ENV['STRIPE_PUBLIC_KEY'] } %>
       <% end %>
     </div>
   <% else %>
     <p class="text-gray-700">Your cart is empty.</p>
   <% end %>
 </div>
-
-<script>
-  document.addEventListener('turbolinks:load', function() {
-    const checkoutForm = document.getElementById('checkout-form');
-
-    checkoutForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      fetch('<%= stripe_checkout_index_path %>', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.url) {
-          window.location.href = data.url;
-        } else {
-          alert('Error creating Stripe session.');
-        }
-      })
-      .catch(error => console.error('Error:', error));
-    });
-  });
-</script>

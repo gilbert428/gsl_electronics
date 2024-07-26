@@ -30,12 +30,12 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = Order.find(params[:id])
+    @order = current_customer.orders.find(params[:id])
     @customer_orders = current_customer.orders.order(created_at: :desc)
   end
 
   def success
-    @order = Order.find(params[:id])
+    @order = Order.find(params[:order_id])
     if @order.update(status: 'paid', order_date: Time.current)
       @order.customer.current_cart.cart_items.destroy_all
       flash[:notice] = "Order successfully paid!"
@@ -47,7 +47,7 @@ class OrdersController < ApplicationController
   end
 
   def cancel
-    @order = Order.find(params[:id])
+    @order = Order.find(params[:order_id])
     if @order.update(status: 'canceled')
       flash[:alert] = "Order payment was canceled."
     else
