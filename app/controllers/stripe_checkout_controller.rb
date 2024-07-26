@@ -2,8 +2,10 @@
 class StripeCheckoutController < ApplicationController
   before_action :authenticate_customer!
 
+
   def create
     @cart = current_cart
+    @order = current_customer.orders.create!(status: 'pending') # Create an order here
 
     session = Stripe::Checkout::Session.create({
       payment_method_types: ['card'],
@@ -20,8 +22,8 @@ class StripeCheckoutController < ApplicationController
         }
       end,
       mode: 'payment',
-      success_url: success_url,
-      cancel_url: cancel_url,
+      success_url: success_orders_url(order_id: @order.id),
+      cancel_url: cancel_orders_url(order_id: @order.id),
       client_reference_id: @cart.secret_id
     })
 

@@ -7,7 +7,7 @@ class Customer < ApplicationRecord
   has_many :addresses
   has_many :admins
   has_many :carts
-  has_many :orders
+ has_many :orders
   has_one :current_cart, class_name: 'Cart', foreign_key: 'customer_id'
   validates :name, :email, :address, :province, presence: true
 

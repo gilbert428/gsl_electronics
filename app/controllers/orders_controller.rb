@@ -35,20 +35,20 @@ class OrdersController < ApplicationController
   end
 
   def success
-    @order = Order.find(params[:order_id])
-    if @order.update(status: 'paid', order_date: Time.current)
+    @order = Order.find_by(id: params[:order_id])
+    if @order&.update(status: 'paid', order_date: Time.current)
       @order.customer.current_cart.cart_items.destroy_all
       flash[:notice] = "Order successfully paid!"
-      render 'success'
+      render 'orders/success'
     else
       flash[:alert] = "There was an issue updating the order status."
-      redirect_to @order
+      redirect_to orders_path # Fallback redirect to orders index or any other appropriate path
     end
   end
 
   def cancel
-    @order = Order.find(params[:order_id])
-    if @order.update(status: 'canceled')
+    @order = Order.find_by(id: params[:order_id])
+    if @order&.update(status: 'canceled')
       flash[:alert] = "Order payment was canceled."
     else
       flash[:alert] = "There was an issue updating the order status."

@@ -1,21 +1,12 @@
-# app/controllers/orders_controller.rb
-class OrdersController < ApplicationController
-  before_action :authenticate_customer!
+class Order < ApplicationRecord
+  belongs_to :customer
+  has_many :order_items
 
-  def success
-    @order = Order.find(params[:order_id])
-    if @order.update(status: 'paid', order_date: Time.current)
-      @order.customer.current_cart.cart_items.destroy_all
-      flash[:notice] = "Order successfully paid!"
-      redirect_to order_path(@order)
-    else
-      flash[:alert] = "There was an issue processing your order."
-      redirect_to root_path
-    end
-  end
+  # other associations and validations
 
-  def cancel
-    flash[:alert] = "Payment canceled."
-    redirect_to root_path
+  enum status: { pending: 0, paid: 1, canceled: 2 }
+
+  def calculate_total
+    self.total_amount = order_items.sum('quantity * price')
   end
 end
