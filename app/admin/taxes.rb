@@ -1,3 +1,4 @@
+# app/admin/taxes.rb
 ActiveAdmin.register Tax do
   permit_params :province, :gst_rate, :pst_rate, :hst_rate, :qst_rate
 

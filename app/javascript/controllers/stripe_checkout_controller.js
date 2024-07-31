@@ -9,17 +9,8 @@ export default class extends Controller {
   async connect() {
     this.stripe = await loadStripe(this.publicKeyValue);
 
-    this.stripe.redirectToCheckout({
-      sessionId: this.sessionIdValue
-    }).then((result) => {
-      if (result.error) {
-        alert(result.error.message);
-      }
-    });
-  }
-
-  disconnect() {
-    this.formTarget.removeEventListener("submit", this.submitForm.bind(this));
+    // Add event listener for province change
+    document.getElementById('province-select').addEventListener('change', this.updateTaxRates.bind(this));
   }
 
   async submitForm(event) {
@@ -44,6 +35,31 @@ export default class extends Controller {
       });
     } else {
       alert("Error creating Stripe session.");
+    }
+  }
+
+  async updateTaxRates(event) {
+    const province = event.target.value;
+
+    // Fetch customer details and tax rates from the server based on the selected province
+    const response = await fetch(`/tax_rates?province=${province}`);
+    const data = await response.json();
+
+    document.getElementById('gst-rate').textContent = data.gst_rate;
+    document.getElementById('pst-rate').textContent = data.pst_rate;
+    document.getElementById('hst-rate').textContent = data.hst_rate;
+    document.getElementById('qst-rate').textContent = data.qst_rate;
+
+    document.getElementById('hidden-gst-rate').value = data.gst_rate;
+    document.getElementById('hidden-pst-rate').value = data.pst_rate;
+    document.getElementById('hidden-hst-rate').value = data.hst_rate;
+    document.getElementById('hidden-qst-rate').value = data.qst_rate;
+
+    // If customer details are also fetched, update the form fields
+    if (data.customer) {
+      document.getElementById('email').value = data.customer.email;
+      document.getElementById('name').value = data.customer.name;
+      document.getElementById('address').value = data.customer.address;
     }
   }
 }

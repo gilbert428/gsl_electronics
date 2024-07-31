@@ -79,11 +79,11 @@ class OrdersController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:address, :city, :province_id, :zip_code, :country, :phone, order_items_attributes: [:product_id, :quantity, :price])
+    params.require(:order).permit(:address, :city, :province, :zip_code, :country, :phone, order_items_attributes: [:product_id, :quantity, :price])
   end
 
   def customer_params
-    params.require(:customer).permit(:address, :city, :province_id, :zip_code, :country, :phone)
+    params.require(:customer).permit(:address, :city, :province, :zip_code, :country, :phone)
   end
 
   def update_order_from_cart(order, cart)
@@ -105,7 +105,7 @@ class OrdersController < ApplicationController
       pst: number_to_currency(order.pst_amount, unit: "CAD$"),
       hst: number_to_currency(order.hst_amount, unit: "CAD$"),
       qst: number_to_currency(order.qst_amount, unit: "CAD$"),
-      total: number_to_currency(order.total_amount, unit: "CAD$")
+      total: number_to_currency(order.total_price_with_tax, unit: "CAD$")
     }
   end
 end

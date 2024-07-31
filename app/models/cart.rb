@@ -1,4 +1,3 @@
-# app/models/cart.rb
 class Cart < ApplicationRecord
   belongs_to :customer
   has_many :cart_items
@@ -15,7 +14,7 @@ class Cart < ApplicationRecord
   private
 
   def set_default_status
-    self.status ||= 'active'
+    self.status = 'active'
   end
 
   def total_price

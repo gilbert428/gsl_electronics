@@ -1,4 +1,3 @@
-# app/controllers/cart_items_controller.rb
 class CartItemsController < ApplicationController
   before_action :authenticate_customer!
 

@@ -1,4 +1,3 @@
-# app/controllers/carts_controller.rb
 class CartsController < ApplicationController
   before_action :authenticate_customer!, only: [:show]
 
@@ -6,6 +5,9 @@ class CartsController < ApplicationController
     @cart = current_cart
     if @cart.nil?
       redirect_to new_customer_session_path, alert: 'Please sign in to continue.'
+    else
+      @customer = current_customer
+      @taxes = Tax.find_by(province: @customer.province)
     end
   end
 
