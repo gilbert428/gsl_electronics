@@ -1,0 +1,86 @@
+<!-- app/views/layouts/application.html.erb -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GSL Electronics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <meta name="stripe-pk" content="<%= Rails.application.credentials.dig(:stripe, :pk) %>">
+    <script src="https://unpkg.com/@hotwired/stimulus"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+  </head>
+
+  <body class="bg-gray-100">
+    <header class="bg-white shadow">
+      <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-3xl font-bold text-gray-900">
+          GSL Electronics
+        </div>
+        <nav>
+          <ul class="flex space-x-4">
+            <li><%= link_to 'Home', root_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+            <li><%= link_to 'Products', products_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+            <% if customer_signed_in? %>
+              <li><%= link_to 'Cart', cart_path(current_customer.carts.find_or_create_by(status: 'active')), class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+              <li><%= link_to 'Orders', orders_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+            <% end %>
+            <li><%= link_to 'Contact', contact_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+            <li><%= link_to 'About', about_path, class: 'text-lg text-gray-700 hover:text-gray-900' %></li>
+            <% if customer_signed_in? %>
+              <li><%= link_to "Sign Out", destroy_customer_session_path, data: { turbo_method: :delete }, class: "text-lg text-gray-700 hover:text-gray-900" %></li>
+            <% else %>
+              <li><%= link_to 'Sign Up', new_customer_registration_path, class: "text-lg text-gray-700 hover:text-gray-900" %></li>
+              <li><%= link_to 'Login', new_customer_session_path, class: "text-lg text-gray-700 hover:text-gray-900" %></li>
+            <% end %>
+          </ul>
+        </nav>
+        <div class="flex space-x-4">
+          <%= form_with url: search_products_path, method: :get, local: true, class: "space-y-2 flex" do |f| %>
+            <div class="space-y-2">
+              <%= f.text_field :keyword, placeholder: "Search by keyword", class: "mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
+            </div>
+            <div class="space-y-2">
+              <%= f.select :category, options_for_select(@categories.pluck(:name), selected: params[:category]), include_blank: true, class: "mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md" %>
+            </div>
+            <div>
+              <%= f.submit "Search", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto mt-10 px-5">
+      <%= render_breadcrumbs %>
+      <%= yield %>
+    </main>
+
+    <script>
+      // Initialize Stimulus application
+      (() => {
+        const application = Stimulus.Application.start();
+
+        // Register your controller
+        application.register("stripe-checkout", class extends Stimulus.Controller {
+          static values = { publicKey: String, sessionId: String }
+
+          async connect() {
+            const loadStripe = window.Stripe;
+            const stripe = await loadStripe(this.publicKeyValue);
+
+            stripe.redirectToCheckout({
+              sessionId: this.sessionIdValue
+            }).then((result) => {
+              if (result.error) {
+                alert(result.error.message);
+              }
+            });
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

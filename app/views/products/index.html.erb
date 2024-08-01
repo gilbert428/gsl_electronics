@@ -1,0 +1,26 @@
+<!-- app/views/products/index.html.erb -->
+<div class="bg-white">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900">Our Products</h2>
+
+    <div class="mt-4 mb-6 flex space-x-4">
+      <%= link_to 'All', products_path, class: "bg-blue-500 text-white px-4 py-2 rounded #{'bg-blue-700' unless params[:on_sale] || params[:new] || params[:recently_updated]}" %>
+      <%= link_to 'On Sale', products_path(on_sale: true), class: "bg-blue-500 text-white px-4 py-2 rounded #{'bg-blue-700' if params[:on_sale]}" %>
+      <%= link_to 'New', products_path(new: true), class: "bg-blue-500 text-white px-4 py-2 rounded #{'bg-blue-700' if params[:new]}" %>
+      <%= link_to 'Recently Updated', products_path(recently_updated: true), class: "bg-blue-500 text-white px-4 py-2 rounded #{'bg-blue-700' if params[:recently_updated]}" %>
+    </div>
+
+    <% if @products.present? %>
+      <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        <% @products.each do |product| %>
+          <%= render partial: 'products/product', locals: { product: product } %>
+        <% end %>
+      </div>
+      <div class="mt-8">
+        <%= paginate @products %>
+      </div>
+    <% else %>
+      <p class="text-gray-700 mt-10">No products found.</p>
+    <% end %>
+  </div>
+</div>

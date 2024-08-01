@@ -1,0 +1,79 @@
+<!-- app/views/carts/show.html.erb -->
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Shopping Cart</h1>
+
+  <% if @cart.cart_items.any? %>
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr>
+          <th class="py-2">Product</th>
+          <th class="py-2">Quantity</th>
+          <th class="py-2">Price</th>
+          <th class="py-2">Total</th>
+          <th class="py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cart.cart_items.each do |item| %>
+          <tr class="border-b">
+            <td class="py-2 px-4"><%= item.product.item_description %></td>
+            <td class="py-2 px-4">
+              <%= form_with(model: item, url: cart_item_path(item), method: :patch, local: true, data: { turbo: false }) do |f| %>
+                <%= f.number_field :quantity, in: 1..item.product.stock_quantity, class: "form-input mt-1 block w-full" %>
+                <%= f.submit "Update", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mt-2" %>
+              <% end %>
+            </td>
+            <td class="py-2 px-4"><%= number_to_currency(item.product.price) %></td>
+            <td class="py-2 px-4"><%= number_to_currency(item.product.price * item.quantity) %></td>
+            <td class="py-2 px-4">
+              <%= form_with model: item, url: cart_item_path(item), method: :delete, local: true do |f| %>
+                <%= f.submit 'Remove', data: { confirm: 'Are you sure?' }, class: 'bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded' %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="mt-4">
+      <p class="text-xl font-bold">Subtotal: <%= number_to_currency(@subtotal) %></p>
+      <p class="text-xl">GST: <%= number_to_currency(@gst) %></p>
+      <p class="text-xl">PST: <%= number_to_currency(@pst) %></p>
+      <p class="text-xl">HST: <%= number_to_currency(@hst) %></p>
+      <p class="text-xl">QST: <%= number_to_currency(@qst) %></p>
+      <p class="text-xl font-bold">Total Tax: <%= number_to_currency(@total_tax) %></p>
+      <p class="text-xl font-bold">Grand Total: <%= number_to_currency(@grand_total) %></p>
+    </div>
+
+    <div class="mt-4 flex space-x-4">
+      <%= link_to 'Continue Shopping', products_path, class: 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded' %>
+      <%= form_with url: stripe_checkout_index_path, method: :post, local: true, id: "checkout-form", data: { turbo: false, controller: "stripe-checkout" } do %>
+        <%= hidden_field_tag :grand_total, @grand_total %>
+        <%= submit_tag "Proceed to Checkout", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded", data: { stripe_checkout_public_key_value: ENV['STRIPE_PUBLIC_KEY'] } %>
+      <% end %>
+    </div>
+
+    <!-- Customer Details Form and Province Dropdown -->
+    <div class="mt-4">
+      <h2 class="text-xl font-bold mb-4">Customer Details</h2>
+      <%= form_with model: @customer, local: true, method: :patch, url: customer_path(@customer), data: { turbo: false } do |f| %>
+        <div class="rounded-md shadow-sm -space-y-px">
+          <%= f.email_field :email, required: true, value: @customer.email, placeholder: "Email address", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" %>
+          <%= f.text_field :name, required: true, value: @customer.name, placeholder: "Name", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" %>
+          <%= f.text_field :address, required: true, value: @customer.address, placeholder: "Address", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" %>
+          <%= f.select :province, options_for_select(Tax.pluck(:province), @customer.province), { prompt: 'Select Province' }, class: 'appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm', id: 'province-select' %>
+        </div>
+        <%= f.submit "Update Details", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <% end %>
+
+      <div id="tax-info" class="mt-4">
+        <p>GST: <span id="gst-rate"><%= @taxes&.gst_rate || 0 %></span>%</p>
+        <p>PST: <span id="pst-rate"><%= @taxes&.pst_rate || 0 %></span>%</p>
+        <p>HST: <span id="hst-rate"><%= @taxes&.hst_rate || 0 %></span>%</p>
+        <p>QST: <span id="qst-rate"><%= @taxes&.qst_rate || 0 %></span>%</p>
+      </div>
+    </div>
+  <% else %>
+    <p class="text-gray-700">Your cart is empty.</p>
+  <% end %>
+</div>
